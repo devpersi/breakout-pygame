@@ -1,0 +1,13 @@
+# ignore ALL .log files
+*.log
+
+#ignore editor files
+*.pyproj
+*.sln
+.vs
+
+# ignore ALL files in ANY directory named temp
+temp/
+
+# temporarily ignore images
+*.png
