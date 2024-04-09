@@ -33,7 +33,7 @@ brick : pg.rect.Rect = pg.Rect(BRICK_HOME_SPAWN_LOCATION, BRICK_SIZE)
 PADDLE_SIZE: tuple[int,int] = 180, 30 # '''width, height'''
 RED_PADDLE_COLOUR: tuple[int,int,int] = 255, 0, 0 # Red paddles
 BLUE_PADDLE_COLOUR: tuple[int,int,int] = 0, 0, 255 # Blue paddles
-PADLE_SPEED: int = 5
+PADDLE_SPEED: int = 5
 PADDLE_HOME_SPAWN_LOCATION: tuple[int,int] = ((SCREEN_SIZE[0] - PADDLE_SIZE[0])*0.5, SCREEN_SIZE[1]*0.95) # Middle bottom of the screen
 FRIENDLY_FIRE: bool = True
 
@@ -92,9 +92,9 @@ while True:
     paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and FRIENDLY_FIRE if COOP else True
     
     if keyboard_press[pg.K_a] and p1_paddle.left > 0:
-        p1_paddle.move_ip(-PADLE_SPEED, 0) # PADLE_SPEED pixels to the left, 0 pixels to the bottom/top
+        p1_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
     elif keyboard_press[pg.K_d] and p1_paddle.right < SCREEN_SIZE[0] and paddles_not_currently_touching:
-        p1_paddle.move_ip(PADLE_SPEED, 0) # PADLE_SPEED pixels to the right, 0 pixels to the bottom/top
+        p1_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
     #elif keyboard_press[pg.K_w]:
     #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
     #elif keyboard_press[pg.K_s]:
@@ -104,9 +104,9 @@ while True:
         # p2 controls
         keyboard_press = pg.key.get_pressed()
         if keyboard_press[pg.K_KP4] and p2_paddle.left > 0 and paddles_not_currently_touching:
-            p2_paddle.move_ip(-PADLE_SPEED, 0) # PADLE_SPEED pixels, 0 pixels to the bottom/top
+            p2_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels, 0 pixels to the bottom/top
         elif keyboard_press[pg.K_KP6] and p2_paddle.right < SCREEN_SIZE[0]:
-            p2_paddle.move_ip(PADLE_SPEED, 0) # PADLE_SPEED pixels, 0 pixels to the bottom/top
+            p2_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels, 0 pixels to the bottom/top
         #elif keyboard_press[pg.K_w]:
         #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
         #elif keyboard_press[pg.K_s]:
