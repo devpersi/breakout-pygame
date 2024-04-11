@@ -22,12 +22,22 @@ BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(BALL_SIZE, SCREEN_SI
 ball = pg.Rect(BALL_HOME_SPAWN_LOCATION, (BALL_SIZE, BALL_SIZE))
 
 # Declare bricks 
-BRICK_SIZE: int = 32, 13 # '''width, height'''
-BRICK_COLOUR: tuple[int,int,int] = 0, 0, 255 # Blue bricks
-BRICK_HOME_SPAWN_LOCATION: tuple[int, int] = ((SCREEN_SIZE[0] - BRICK_SIZE[0])*0.5, (SCREEN_SIZE[1] - BRICK_SIZE[1])*0.5) # Middle of the screen
+BRICK_COLUMNS: int = 10
+BRICK_ROWS: int = 6
+BRICK_ROWS_TIMES_COLUMNS: int = BRICK_COLUMNS * BRICK_ROWS
+BRICK_SIZE: int = SCREEN_SIZE[0] // BRICK_COLUMNS, SCREEN_SIZE[1]*0.3 // BRICK_ROWS # '''width, height'''
+BRICK_RED: tuple[int,int,int] = 242, 85, 96
+BRICK_GREEN: tuple[int,int,int] = 86, 174, 87
+BRICK_BLUE: tuple[int,int,int] = 69, 177, 232
 
-# Create brick
-brick : pg.rect.Rect = pg.Rect(BRICK_HOME_SPAWN_LOCATION, BRICK_SIZE)
+# Create bricks
+brick_list : tuple[pg.rect.Rect, int] = [pg.Rect(BRICK_SIZE[0] * w, BRICK_SIZE[1] * h, BRICK_SIZE[0], BRICK_SIZE[1]) 
+                                    for h in range (BRICK_ROWS) for w in range(BRICK_COLUMNS)]
+
+# Filter bricks by colour
+red_brick_list = brick_list[:BRICK_ROWS_TIMES_COLUMNS // 3]
+green_brick_list = brick_list[BRICK_ROWS_TIMES_COLUMNS // 3:BRICK_ROWS_TIMES_COLUMNS // 3 * 2]
+blue_brick_list = brick_list[BRICK_ROWS_TIMES_COLUMNS // 3 * 2:]
 
 # Declare paddles
 PADDLE_SIZE: tuple[int,int] = 180, 30 # '''width, height'''
@@ -83,9 +93,76 @@ while True:
     if COOP:
         if ball.colliderect(p2_paddle) and BALL_VELOCITY_Y > 0:
             BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+
+    
+    # same for brick collision
+    for brick in blue_brick_list:
+        if ball.colliderect(brick):
+            if ball.centery < brick.bottom or ball.centery > brick.top:
+                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                converted_brick_list = list(blue_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                blue_brick_list = tuple(converted_brick_list)
+                break
+            if ball.centerx > brick.right or ball.centerx < brick.left:
+                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                converted_brick_list = list(blue_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                blue_brick_list = tuple(converted_brick_list)
+                break
+    
+    for brick in green_brick_list:
+        if ball.colliderect(brick):
+            if ball.centery < brick.bottom or ball.centery > brick.top:
+                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                converted_brick_list = list(green_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                green_brick_list = tuple(converted_brick_list)
+                break
+            if ball.centerx > brick.right or ball.centerx < brick.left:
+                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                converted_brick_list = list(green_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                green_brick_list = tuple(converted_brick_list)
+                break
+    
+    for brick in red_brick_list:
+        if ball.colliderect(brick):
+            if ball.centery < brick.bottom or ball.centery > brick.top:
+                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                converted_brick_list = list(red_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                red_brick_list = tuple(converted_brick_list)
+                break
+            if ball.centerx > brick.right or ball.centerx < brick.left:
+                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                converted_brick_list = list(red_brick_list)
+                try:
+                    converted_brick_list.remove(brick)
+                except Exception as e:
+                    print(e)
+                red_brick_list = tuple(converted_brick_list)
+                break
     
     # Spawn brick
-    pg.draw.rect(screen, BRICK_COLOUR, brick)
+    [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
+    [pg.draw.rect(screen, BRICK_GREEN, brick) for brick in green_brick_list]
+    [pg.draw.rect(screen, BRICK_BLUE, brick) for brick in blue_brick_list]
     
     # Spawn paddles
     pg.draw.rect(screen, RED_PADDLE_COLOUR, p1_paddle)
