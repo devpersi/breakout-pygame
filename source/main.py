@@ -61,6 +61,13 @@ while True:
     ball.x += BALL_SPEED * BALL_VELOCITY_X
     ball.y += BALL_SPEED * BALL_VELOCITY_Y
     
+    # Reset when hitting the bottom
+    if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
+        ball.x = BALL_HOME_SPAWN_LOCATION[0]
+        ball.y = BALL_HOME_SPAWN_LOCATION[1]
+        ball.x += BALL_SPEED * BALL_VELOCITY_X
+        ball.y += BALL_SPEED * BALL_VELOCITY_Y
+        
     # Reflect the ball when it reaches a side wall
     if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
         BALL_VELOCITY_X = -BALL_VELOCITY_X
