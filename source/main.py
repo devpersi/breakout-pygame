@@ -35,9 +35,9 @@ brick_list : tuple[pg.rect.Rect, int] = [pg.Rect(BRICK_SIZE[0] * w, BRICK_SIZE[1
                                     for h in range (BRICK_ROWS) for w in range(BRICK_COLUMNS)]
 
 # Filter bricks by colour
-red_brick_list = brick_list[:BRICK_ROWS_TIMES_COLUMNS // 3]
-green_brick_list = brick_list[BRICK_ROWS_TIMES_COLUMNS // 3:BRICK_ROWS_TIMES_COLUMNS // 3 * 2]
-blue_brick_list = brick_list[BRICK_ROWS_TIMES_COLUMNS // 3 * 2:]
+red_brick_list = list(brick_list[:BRICK_ROWS_TIMES_COLUMNS // 3])
+green_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3:BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
+blue_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
 
 # Declare paddles
 PADDLE_SIZE: tuple[int,int] = 180, 30 # '''width, height'''
@@ -100,63 +100,51 @@ while True:
         if ball.colliderect(brick):
             if ball.centery < brick.bottom or ball.centery > brick.top:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                converted_brick_list = list(blue_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    blue_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                blue_brick_list = tuple(converted_brick_list)
                 break
             if ball.centerx > brick.right or ball.centerx < brick.left:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                converted_brick_list = list(blue_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    blue_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                blue_brick_list = tuple(converted_brick_list)
                 break
     
     for brick in green_brick_list:
         if ball.colliderect(brick):
             if ball.centery < brick.bottom or ball.centery > brick.top:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                converted_brick_list = list(green_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    green_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                green_brick_list = tuple(converted_brick_list)
                 break
             if ball.centerx > brick.right or ball.centerx < brick.left:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                converted_brick_list = list(green_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    green_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                green_brick_list = tuple(converted_brick_list)
                 break
     
     for brick in red_brick_list:
         if ball.colliderect(brick):
             if ball.centery < brick.bottom or ball.centery > brick.top:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                converted_brick_list = list(red_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    red_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                red_brick_list = tuple(converted_brick_list)
                 break
             if ball.centerx > brick.right or ball.centerx < brick.left:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                converted_brick_list = list(red_brick_list)
                 try:
-                    converted_brick_list.remove(brick)
+                    red_brick_list.remove(brick)
                 except Exception as e:
                     print(e)
-                red_brick_list = tuple(converted_brick_list)
                 break
     
     # Spawn brick
