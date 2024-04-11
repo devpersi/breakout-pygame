@@ -73,10 +73,10 @@ while True:
     
     # Reset when hitting the bottom
     if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
-        ball.x = BALL_HOME_SPAWN_LOCATION[0]
+        ball.x = random.randint(BALL_SIZE, SCREEN_SIZE[0] - BALL_SIZE)
         ball.y = BALL_HOME_SPAWN_LOCATION[1]
-        ball.x += BALL_SPEED * BALL_VELOCITY_X
-        ball.y += BALL_SPEED * BALL_VELOCITY_Y
+        BALL_VELOCITY_X = random.choice([1, -1])
+        BALL_VELOCITY_Y = random.choice([1, -1])
         
     # Reflect the ball when it reaches a side wall
     if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
