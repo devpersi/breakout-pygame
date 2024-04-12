@@ -98,53 +98,35 @@ while True:
     # same for brick collision
     for brick in blue_brick_list:
         if ball.colliderect(brick):
-            if ball.centery < brick.bottom or ball.centery > brick.top:
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                try:
-                    blue_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                blue_brick_list.remove(brick)
                 break
-            if ball.centerx > brick.right or ball.centerx < brick.left:
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                try:
-                    blue_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                blue_brick_list.remove(brick)
                 break
-    
+            
     for brick in green_brick_list:
         if ball.colliderect(brick):
-            if ball.centery < brick.bottom or ball.centery > brick.top:
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                try:
-                    green_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                green_brick_list.remove(brick)
                 break
-            if ball.centerx > brick.right or ball.centerx < brick.left:
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                try:
-                    green_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                green_brick_list.remove(brick)
                 break
     
     for brick in red_brick_list:
         if ball.colliderect(brick):
-            if ball.centery < brick.bottom or ball.centery > brick.top:
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
                 BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-                try:
-                    red_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                red_brick_list.remove(brick)
                 break
-            if ball.centerx > brick.right or ball.centerx < brick.left:
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
                 BALL_VELOCITY_X = -BALL_VELOCITY_X
-                try:
-                    red_brick_list.remove(brick)
-                except Exception as e:
-                    print(e)
+                red_brick_list.remove(brick)
                 break
     
     # Spawn brick
