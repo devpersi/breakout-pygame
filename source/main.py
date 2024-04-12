@@ -16,7 +16,7 @@ BALL_COLOUR : tuple[int,int,int] = 0, 0 , 0 # Black ball
 BALL_SPEED: int = 4 # 4 pixels per frame
 BALL_VELOCITY_X: int = 1
 BALL_VELOCITY_Y: int = -1
-BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(BALL_SIZE, SCREEN_SIZE[0] - BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
+BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
 
 # Create balls
 ball = pg.Rect(BALL_HOME_SPAWN_LOCATION, (BALL_SIZE, BALL_SIZE))
@@ -73,7 +73,7 @@ while True:
     
     # Reset when hitting the bottom
     if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
-        ball.x = random.randint(BALL_SIZE, SCREEN_SIZE[0] - BALL_SIZE)
+        ball.x = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE)
         ball.y = BALL_HOME_SPAWN_LOCATION[1]
         BALL_VELOCITY_X = random.choice([1, -1])
         BALL_VELOCITY_Y = random.choice([1, -1])
