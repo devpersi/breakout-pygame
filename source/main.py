@@ -96,7 +96,6 @@ while True:
 
     
     # same for brick collision
-
     bounced_x, bounced_y = False, False
 
     for brick in blue_brick_list.copy():
@@ -128,9 +127,9 @@ while True:
                 red_brick_list.remove(brick)
 
     if bounced_x:
-        BALL_VELOCITY_X *= -1
+        BALL_VELOCITY_X = -BALL_VELOCITY_X
     if bounced_y:
-        BALL_VELOCITY_Y *= -1
+        BALL_VELOCITY_Y = -BALL_VELOCITY_Y
 
     # Spawn brick
     [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
@@ -161,14 +160,13 @@ while True:
         # p2 controls
         keyboard_press = pg.key.get_pressed()
         if keyboard_press[pg.K_KP4] and p2_paddle.left > 0 and paddles_not_currently_touching:
-            p2_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels, 0 pixels to the bottom/top
+            p2_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
         elif keyboard_press[pg.K_KP6] and p2_paddle.right < SCREEN_SIZE[0]:
-            p2_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels, 0 pixels to the bottom/top
+            p2_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
         #elif keyboard_press[pg.K_w]:
         #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
         #elif keyboard_press[pg.K_s]:
         #    red_paddle.move_ip(0, 1) # 0 pixel to the left/right, 1 pixel to the bottom
         
-
     pg.display.update()
     clock.tick(FPS)
