@@ -96,39 +96,42 @@ while True:
 
     
     # same for brick collision
-    for brick in blue_brick_list:
+
+    bounced_x, bounced_y = False, False
+
+    for brick in blue_brick_list.copy():
         if ball.colliderect(brick):
             if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                bounced_y = True
                 blue_brick_list.remove(brick)
-                break
             if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                bounced_x = True
                 blue_brick_list.remove(brick)
-                break
-            
-    for brick in green_brick_list:
+
+    for brick in green_brick_list.copy():
         if ball.colliderect(brick):
             if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                bounced_y = True
                 green_brick_list.remove(brick)
-                break
+
             if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                bounced_x = True
                 green_brick_list.remove(brick)
-                break
-    
-    for brick in red_brick_list:
+
+    for brick in red_brick_list.copy():
         if ball.colliderect(brick):
             if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+                bounced_y = True
                 red_brick_list.remove(brick)
-                break
             if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                BALL_VELOCITY_X = -BALL_VELOCITY_X
+                bounced_x = True
                 red_brick_list.remove(brick)
-                break
-    
+
+    if bounced_x:
+        BALL_VELOCITY_X *= -1
+    if bounced_y:
+        BALL_VELOCITY_Y *= -1
+
     # Spawn brick
     [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
     [pg.draw.rect(screen, BRICK_GREEN, brick) for brick in green_brick_list]
