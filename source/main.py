@@ -16,18 +16,28 @@ BALL_COLOUR : tuple[int,int,int] = 0, 0 , 0 # Black ball
 BALL_SPEED: int = 4 # 4 pixels per frame
 BALL_VELOCITY_X: int = 1
 BALL_VELOCITY_Y: int = -1
-BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(BALL_SIZE, SCREEN_SIZE[0] - BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
+BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
 
 # Create balls
 ball = pg.Rect(BALL_HOME_SPAWN_LOCATION, (BALL_SIZE, BALL_SIZE))
 
 # Declare bricks 
-BRICK_SIZE: int = 32, 13 # '''width, height'''
-BRICK_COLOUR: tuple[int,int,int] = 0, 0, 255 # Blue bricks
-BRICK_HOME_SPAWN_LOCATION: tuple[int, int] = ((SCREEN_SIZE[0] - BRICK_SIZE[0])*0.5, (SCREEN_SIZE[1] - BRICK_SIZE[1])*0.5) # Middle of the screen
+BRICK_COLUMNS: int = 10
+BRICK_ROWS: int = 6
+BRICK_ROWS_TIMES_COLUMNS: int = BRICK_COLUMNS * BRICK_ROWS
+BRICK_SIZE: int = SCREEN_SIZE[0] // BRICK_COLUMNS, SCREEN_SIZE[1]*0.3 // BRICK_ROWS # '''width, height'''
+BRICK_RED: tuple[int,int,int] = 242, 85, 96
+BRICK_GREEN: tuple[int,int,int] = 86, 174, 87
+BRICK_BLUE: tuple[int,int,int] = 69, 177, 232
 
-# Create brick
-brick : pg.rect.Rect = pg.Rect(BRICK_HOME_SPAWN_LOCATION, BRICK_SIZE)
+# Create bricks
+brick_list : tuple[pg.rect.Rect, int] = [pg.Rect(BRICK_SIZE[0] * w, BRICK_SIZE[1] * h, BRICK_SIZE[0], BRICK_SIZE[1]) 
+                                    for h in range (BRICK_ROWS) for w in range(BRICK_COLUMNS)]
+
+# Filter bricks by colour
+red_brick_list = list(brick_list[:BRICK_ROWS_TIMES_COLUMNS // 3])
+green_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3:BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
+blue_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
 
 # Declare paddles
 PADDLE_SIZE: tuple[int,int] = 180, 30 # '''width, height'''
@@ -61,6 +71,13 @@ while True:
     ball.x += BALL_SPEED * BALL_VELOCITY_X
     ball.y += BALL_SPEED * BALL_VELOCITY_Y
     
+    # Reset when hitting the bottom
+    if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
+        ball.x = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE)
+        ball.y = BALL_HOME_SPAWN_LOCATION[1]
+        BALL_VELOCITY_X = random.choice([1, -1])
+        BALL_VELOCITY_Y = random.choice([1, -1])
+        
     # Reflect the ball when it reaches a side wall
     if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
         BALL_VELOCITY_X = -BALL_VELOCITY_X
@@ -76,9 +93,49 @@ while True:
     if COOP:
         if ball.colliderect(p2_paddle) and BALL_VELOCITY_Y > 0:
             BALL_VELOCITY_Y = -BALL_VELOCITY_Y
+
     
+    # same for brick collision
+
+    bounced_x, bounced_y = False, False
+
+    for brick in blue_brick_list.copy():
+        if ball.colliderect(brick):
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
+                bounced_y = True
+                blue_brick_list.remove(brick)
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
+                bounced_x = True
+                blue_brick_list.remove(brick)
+
+    for brick in green_brick_list.copy():
+        if ball.colliderect(brick):
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
+                bounced_y = True
+                green_brick_list.remove(brick)
+
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
+                bounced_x = True
+                green_brick_list.remove(brick)
+
+    for brick in red_brick_list.copy():
+        if ball.colliderect(brick):
+            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
+                bounced_y = True
+                red_brick_list.remove(brick)
+            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
+                bounced_x = True
+                red_brick_list.remove(brick)
+
+    if bounced_x:
+        BALL_VELOCITY_X *= -1
+    if bounced_y:
+        BALL_VELOCITY_Y *= -1
+
     # Spawn brick
-    pg.draw.rect(screen, BRICK_COLOUR, brick)
+    [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
+    [pg.draw.rect(screen, BRICK_GREEN, brick) for brick in green_brick_list]
+    [pg.draw.rect(screen, BRICK_BLUE, brick) for brick in blue_brick_list]
     
     # Spawn paddles
     pg.draw.rect(screen, RED_PADDLE_COLOUR, p1_paddle)
