@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+import collisions
 
 # Create game window
 pg.init()
@@ -10,13 +11,14 @@ FPS: int = 60
 screen : pg.surface.Surface = pg.display.set_mode(SCREEN_SIZE)
 
 # Declare balls
+COLLISION_THRESHOLD = 5
 BALL_RADIUS: int = 10
 BALL_SIZE: int = int(BALL_RADIUS*2**0.5)
 BALL_COLOUR : tuple[int,int,int] = 0, 0 , 0 # Black ball
 BALL_SPEED: int = 4 # 4 pixels per frame
-BALL_VELOCITY_X: int = 1
-BALL_VELOCITY_Y: int = -1
 BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
+ball_direction_x: int = 1
+ball_direction_y: int = -1
 
 # Create balls
 ball = pg.Rect(BALL_HOME_SPAWN_LOCATION, (BALL_SIZE, BALL_SIZE))
@@ -67,69 +69,6 @@ while True:
     
     # Spawn ball
     pg.draw.circle(screen, BALL_COLOUR, ball.center, BALL_RADIUS)
-    # Move the ball
-    ball.x += BALL_SPEED * BALL_VELOCITY_X
-    ball.y += BALL_SPEED * BALL_VELOCITY_Y
-    
-    # Reset when hitting the bottom
-    if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
-        ball.x = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE)
-        ball.y = BALL_HOME_SPAWN_LOCATION[1]
-        BALL_VELOCITY_X = random.choice([1, -1])
-        BALL_VELOCITY_Y = random.choice([1, -1])
-        
-    # Reflect the ball when it reaches a side wall
-    if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
-        BALL_VELOCITY_X = -BALL_VELOCITY_X
-    
-    # same for the top
-    if ball.centery < BALL_RADIUS:
-        BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-        
-    # same for paddle collision
-    if ball.colliderect(p1_paddle) and BALL_VELOCITY_Y > 0:
-        BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-        
-    if COOP:
-        if ball.colliderect(p2_paddle) and BALL_VELOCITY_Y > 0:
-            BALL_VELOCITY_Y = -BALL_VELOCITY_Y
-
-    
-    # same for brick collision
-    bounced_x, bounced_y = False, False
-
-    for brick in blue_brick_list.copy():
-        if ball.colliderect(brick):
-            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                bounced_y = True
-                blue_brick_list.remove(brick)
-            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                bounced_x = True
-                blue_brick_list.remove(brick)
-
-    for brick in green_brick_list.copy():
-        if ball.colliderect(brick):
-            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                bounced_y = True
-                green_brick_list.remove(brick)
-
-            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                bounced_x = True
-                green_brick_list.remove(brick)
-
-    for brick in red_brick_list.copy():
-        if ball.colliderect(brick):
-            if ball.bottom - BALL_SPEED * BALL_VELOCITY_Y < brick.top or ball.top - BALL_SPEED * BALL_VELOCITY_Y > brick.bottom:
-                bounced_y = True
-                red_brick_list.remove(brick)
-            if ball.right - BALL_SPEED * BALL_VELOCITY_X < brick.left or ball.left - BALL_SPEED * BALL_VELOCITY_X > brick.right:
-                bounced_x = True
-                red_brick_list.remove(brick)
-
-    if bounced_x:
-        BALL_VELOCITY_X = -BALL_VELOCITY_X
-    if bounced_y:
-        BALL_VELOCITY_Y = -BALL_VELOCITY_Y
 
     # Spawn brick
     [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
@@ -141,6 +80,49 @@ while True:
     
     if COOP:
         pg.draw.rect(screen, BLUE_PADDLE_COLOUR, p2_paddle)
+    
+    # Move the ball
+    ball.x += BALL_SPEED * ball_direction_x
+    ball.y += BALL_SPEED * ball_direction_y
+    
+    # Reset when hitting the bottom
+    if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
+        ball.x = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE)
+        ball.y = BALL_HOME_SPAWN_LOCATION[1]
+        ball_direction_x = random.choice([1, -1])
+        ball_direction_y = random.choice([1, -1])
+        
+    # Reflect the ball when it reaches a side wall
+    if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
+        ball_direction_x = -ball_direction_x
+    
+    # same for the top
+    if ball.centery < BALL_RADIUS:
+        ball_direction_y = -ball_direction_y
+        
+    # same for paddle collision
+    if ball.colliderect(p1_paddle) and ball_direction_y > 0:
+        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, p1_paddle, COLLISION_THRESHOLD)
+        
+    if COOP:
+        if ball.colliderect(p2_paddle) and ball_direction_y > 0:
+            ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, p2_paddle, COLLISION_THRESHOLD)
+
+    # same for brick collision
+    brick_index = ball.collidelist(blue_brick_list)
+    if brick_index != -1:
+        brick = blue_brick_list.pop(brick_index)
+        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
+    
+    brick_index = ball.collidelist(green_brick_list)
+    if brick_index != -1:
+        brick = green_brick_list.pop(brick_index)
+        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
+    
+    brick_index = ball.collidelist(red_brick_list)
+    if brick_index != -1:
+        brick = red_brick_list.pop(brick_index)
+        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
 
     # p1 controls
     keyboard_press = pg.key.get_pressed()
