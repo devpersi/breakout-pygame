@@ -1,59 +1,32 @@
 import pygame as pg
 import random
-import collisions
+import settings
+from collisions import collision
+
 
 # Create game window
 pg.init()
-SCREEN_SIZE: tuple[int, int] = 1280, 720 # '''width, height'''
-SCREEN_BACKGROUND_COLOUR: tuple[int, int, int] = 52, 78, 91
-FPS: int = 60
 
-screen : pg.surface.Surface = pg.display.set_mode(SCREEN_SIZE)
-
-# Declare balls
-COLLISION_THRESHOLD = 5
-BALL_RADIUS: int = 10
-BALL_SIZE: int = int(BALL_RADIUS*2**0.5)
-BALL_COLOUR : tuple[int,int,int] = 0, 0 , 0 # Black ball
-BALL_SPEED: int = 4 # 4 pixels per frame
-BALL_HOME_SPAWN_LOCATION : tuple[int, int] = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE), (SCREEN_SIZE[1] - BALL_SIZE)*0.5
-ball_direction_x: int = 1
-ball_direction_y: int = -1
+screen : pg.surface.Surface = pg.display.set_mode(settings.SCREEN_SIZE)
 
 # Create balls
-ball = pg.Rect(BALL_HOME_SPAWN_LOCATION, (BALL_SIZE, BALL_SIZE))
-
-# Declare bricks 
-BRICK_COLUMNS: int = 10
-BRICK_ROWS: int = 6
-BRICK_ROWS_TIMES_COLUMNS: int = BRICK_COLUMNS * BRICK_ROWS
-BRICK_SIZE: int = SCREEN_SIZE[0] // BRICK_COLUMNS, SCREEN_SIZE[1]*0.3 // BRICK_ROWS # '''width, height'''
-BRICK_RED: tuple[int,int,int] = 242, 85, 96
-BRICK_GREEN: tuple[int,int,int] = 86, 174, 87
-BRICK_BLUE: tuple[int,int,int] = 69, 177, 232
+ball_direction_x: int = 1
+ball_direction_y: int = -1
+ball = pg.Rect(settings.BALL_HOME_SPAWN_LOCATION, (settings.BALL_SIZE, settings.BALL_SIZE))
 
 # Create bricks
-brick_list : tuple[pg.rect.Rect, int] = [pg.Rect(BRICK_SIZE[0] * w, BRICK_SIZE[1] * h, BRICK_SIZE[0], BRICK_SIZE[1]) 
-                                    for h in range (BRICK_ROWS) for w in range(BRICK_COLUMNS)]
+brick_list : tuple[pg.rect.Rect, int] = [pg.Rect(settings.BRICK_SIZE[0] * w, settings.BRICK_SIZE[1] * h, settings.BRICK_SIZE[0], settings.BRICK_SIZE[1]) 
+                                    for h in range (settings.BRICK_ROWS) for w in range(settings.BRICK_COLUMNS)]
 
 # Filter bricks by colour
-red_brick_list = list(brick_list[:BRICK_ROWS_TIMES_COLUMNS // 3])
-green_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3:BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
-blue_brick_list = list(brick_list[BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
-
-# Declare paddles
-PADDLE_SIZE: tuple[int,int] = 180, 30 # '''width, height'''
-RED_PADDLE_COLOUR: tuple[int,int,int] = 255, 0, 0 # Red paddles
-BLUE_PADDLE_COLOUR: tuple[int,int,int] = 0, 0, 255 # Blue paddles
-PADDLE_SPEED: int = 5
-PADDLE_HOME_SPAWN_LOCATION: tuple[int,int] = ((SCREEN_SIZE[0] - PADDLE_SIZE[0])*0.5, SCREEN_SIZE[1]*0.95) # Middle bottom of the screen
-FRIENDLY_FIRE: bool = True
+red_brick_list = list(brick_list[:settings.BRICK_ROWS_TIMES_COLUMNS // 3])
+green_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3:settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
+blue_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
 
 # Create paddles
-COOP: bool = False
-p1_paddle : pg.rect.Rect = pg.Rect(PADDLE_HOME_SPAWN_LOCATION, PADDLE_SIZE)
-if COOP:
-    p2_paddle : pg.rect.Rect = pg.Rect(PADDLE_HOME_SPAWN_LOCATION, PADDLE_SIZE)
+p1_paddle : pg.rect.Rect = pg.Rect(settings.PADDLE_HOME_SPAWN_LOCATION, settings.PADDLE_SIZE)
+if settings.COOP:
+    p2_paddle : pg.rect.Rect = pg.Rect(settings.PADDLE_HOME_SPAWN_LOCATION, settings.PADDLE_SIZE)
 
 # Create game loop
 clock : pg.time.Clock = pg.time.Clock()
@@ -65,90 +38,82 @@ while True:
             exit()
             
     # Clear the screen
-    screen.fill(SCREEN_BACKGROUND_COLOUR)
+    screen.fill(settings.SCREEN_BACKGROUND_COLOUR)
     
     # Spawn ball
-    pg.draw.circle(screen, BALL_COLOUR, ball.center, BALL_RADIUS)
+    pg.draw.circle(screen, settings.BALL_COLOUR, ball.center, settings.BALL_RADIUS)
 
     # Spawn brick
-    [pg.draw.rect(screen, BRICK_RED, brick) for brick in red_brick_list]
-    [pg.draw.rect(screen, BRICK_GREEN, brick) for brick in green_brick_list]
-    [pg.draw.rect(screen, BRICK_BLUE, brick) for brick in blue_brick_list]
+    [pg.draw.rect(screen, settings.BRICK_RED, brick) for brick in red_brick_list]
+    [pg.draw.rect(screen, settings.BRICK_GREEN, brick) for brick in green_brick_list]
+    [pg.draw.rect(screen, settings.BRICK_BLUE, brick) for brick in blue_brick_list]
     
     # Spawn paddles
-    pg.draw.rect(screen, RED_PADDLE_COLOUR, p1_paddle)
+    pg.draw.rect(screen, settings.RED_PADDLE_COLOUR, p1_paddle)
     
-    if COOP:
-        pg.draw.rect(screen, BLUE_PADDLE_COLOUR, p2_paddle)
+    if settings.COOP:
+        pg.draw.rect(screen, settings.BLUE_PADDLE_COLOUR, p2_paddle)
     
     # Move the ball
-    ball.x += BALL_SPEED * ball_direction_x
-    ball.y += BALL_SPEED * ball_direction_y
+    ball.x += settings.BALL_SPEED * ball_direction_x
+    ball.y += settings.BALL_SPEED * ball_direction_y
     
     # Reset when hitting the bottom
-    if ball.centery > SCREEN_SIZE[1] - BALL_RADIUS:
-        ball.x = random.randint(2*BALL_SIZE, SCREEN_SIZE[0] - 2*BALL_SIZE)
-        ball.y = BALL_HOME_SPAWN_LOCATION[1]
+    if ball.centery > settings.SCREEN_SIZE[1] - settings.BALL_RADIUS:
+        ball.x = random.randint(2*settings.BALL_SIZE, settings.SCREEN_SIZE[0] - 2*settings.BALL_SIZE)
+        ball.y = settings.BALL_HOME_SPAWN_LOCATION[1]
         ball_direction_x = random.choice([1, -1])
         ball_direction_y = random.choice([1, -1])
         
     # Reflect the ball when it reaches a side wall
-    if ball.centerx < BALL_RADIUS or ball.centerx > SCREEN_SIZE[0] - BALL_RADIUS:
+    if ball.centerx < settings.BALL_RADIUS or ball.centerx > settings.SCREEN_SIZE[0] - settings.BALL_RADIUS:
         ball_direction_x = -ball_direction_x
     
     # same for the top
-    if ball.centery < BALL_RADIUS:
+    if ball.centery < settings.BALL_RADIUS:
         ball_direction_y = -ball_direction_y
         
     # same for paddle collision
     if ball.colliderect(p1_paddle) and ball_direction_y > 0:
-        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, p1_paddle, COLLISION_THRESHOLD)
+        ball_direction_x, ball_direction_y = collision(ball_direction_x, ball_direction_y, ball, p1_paddle, settings.COLLISION_THRESHOLD)
         
-    if COOP:
+    if settings.COOP:
         if ball.colliderect(p2_paddle) and ball_direction_y > 0:
-            ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, p2_paddle, COLLISION_THRESHOLD)
+            ball_direction_x, ball_direction_y = collision(ball_direction_x, ball_direction_y, ball, p2_paddle, settings.COLLISION_THRESHOLD)
 
     # same for brick collision
     brick_index = ball.collidelist(blue_brick_list)
     if brick_index != -1:
         brick = blue_brick_list.pop(brick_index)
-        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
+        ball_direction_x, ball_direction_y = collision(ball_direction_x, ball_direction_y, ball, brick, settings.COLLISION_THRESHOLD)
     
     brick_index = ball.collidelist(green_brick_list)
     if brick_index != -1:
         brick = green_brick_list.pop(brick_index)
-        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
+        ball_direction_x, ball_direction_y = collision(ball_direction_x, ball_direction_y, ball, brick, settings.COLLISION_THRESHOLD)
     
     brick_index = ball.collidelist(red_brick_list)
     if brick_index != -1:
         brick = red_brick_list.pop(brick_index)
-        ball_direction_x, ball_direction_y = collisions.collision(ball_direction_x, ball_direction_y, ball, brick, COLLISION_THRESHOLD)
+        ball_direction_x, ball_direction_y = collision(ball_direction_x, ball_direction_y, ball, brick, settings.COLLISION_THRESHOLD)
 
     # p1 controls
     keyboard_press = pg.key.get_pressed()
     
-    paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and FRIENDLY_FIRE if COOP else True
+    paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and settings.FRIENDLY_FIRE if settings.COOP else True
     
     if keyboard_press[pg.K_a] and p1_paddle.left > 0:
-        p1_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
-    elif keyboard_press[pg.K_d] and p1_paddle.right < SCREEN_SIZE[0] and paddles_not_currently_touching:
-        p1_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
-    #elif keyboard_press[pg.K_w]:
-    #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
-    #elif keyboard_press[pg.K_s]:
-    #    red_paddle.move_ip(0, 1) # 0 pixel to the left/right, 1 pixel to the bottom
+        p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+    elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_SIZE[0] and paddles_not_currently_touching:
+        p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
         
-    if COOP:
+    if settings.COOP:
         # p2 controls
         keyboard_press = pg.key.get_pressed()
         if keyboard_press[pg.K_KP4] and p2_paddle.left > 0 and paddles_not_currently_touching:
-            p2_paddle.move_ip(-PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
-        elif keyboard_press[pg.K_KP6] and p2_paddle.right < SCREEN_SIZE[0]:
-            p2_paddle.move_ip(PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
-        #elif keyboard_press[pg.K_w]:
-        #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
-        #elif keyboard_press[pg.K_s]:
-        #    red_paddle.move_ip(0, 1) # 0 pixel to the left/right, 1 pixel to the bottom
+            p2_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+        elif keyboard_press[pg.K_KP6] and p2_paddle.right < settings.SCREEN_SIZE[0]:
+            p2_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
         
     pg.display.update()
-    clock.tick(FPS)
+    clock.tick(settings.FPS)

@@ -11,3 +11,6 @@ temp/
 
 # temporarily ignore images
 *.png
+
+# ignore pycache
+__pycache__
