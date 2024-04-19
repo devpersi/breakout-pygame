@@ -106,10 +106,6 @@ while True:
         p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
     elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_SIZE[0] and paddles_not_currently_touching:
         p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
-    #elif keyboard_press[pg.K_w]:
-    #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
-    #elif keyboard_press[pg.K_s]:
-    #    red_paddle.move_ip(0, 1) # 0 pixel to the left/right, 1 pixel to the bottom
         
     if settings.COOP:
         # p2 controls
@@ -118,10 +114,6 @@ while True:
             p2_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
         elif keyboard_press[pg.K_KP6] and p2_paddle.right < settings.SCREEN_SIZE[0]:
             p2_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
-        #elif keyboard_press[pg.K_w]:
-        #    red_paddle.move_ip(0, -1) # 0 pixels to the right/left, 1 pixel to the top
-        #elif keyboard_press[pg.K_s]:
-        #    red_paddle.move_ip(0, 1) # 0 pixel to the left/right, 1 pixel to the bottom
         
     pg.display.update()
     clock.tick(settings.FPS)
