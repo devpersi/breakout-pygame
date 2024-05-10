@@ -18,6 +18,7 @@ Attributes:
     BALL_COLOUR (tuple[int, int, int]): The RGB colour tuple representing the colour of the ball.
     BALL_SPEED (int): The speed of the ball in pixels per frame.
     BALL_HOME_SPAWN_LOCATION (tuple[int, int]): The initial spawn location of the ball on the screen, specified as (x, y) coordinates.
+    ball_count (int): The number of balls
     
     BRICK_COLUMNS (int): The number of columns of bricks in the game.
     BRICK_ROWS (int): The number of rows of bricks in the game.

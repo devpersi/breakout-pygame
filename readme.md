@@ -6,10 +6,10 @@ This project is an assignment for a python class, built using pygame. The projec
 ## Getting Started
 1. Clone or download the repository to your local machine
 2. Make sure [Python](https://www.python.org/downloads/) and [pygame](https://www.pygame.org/news) are installed
-3. Open a terminal and cd into the folder that stored the repository
-4. Run on Windows
+3. Open a terminal and cd into the source folder
+4. Run
   ```
-  python .\source\main.py
+  python main.py
   ```
 
 ## Project Features
