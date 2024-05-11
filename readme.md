@@ -24,7 +24,7 @@ This project is an assignment for a python class, built using pygame. The projec
 ## Authors
 - Persi.Dev
 - DimPour
-- + more
+- zizwrzhs
   
 ## Acknowledgments
 - [Course page on opencourses.ionio.gr](https://opencourses.ionio.gr/courses/DDI212/)
