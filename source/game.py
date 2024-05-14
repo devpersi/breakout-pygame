@@ -63,9 +63,7 @@ def loop(screen : pg.Surface) -> None:
         if settings.COOP:
             pg.draw.rect(screen, settings.BLUE_PADDLE_COLOUR, p2_paddle)
         
-        i=0
-        for ball in balls:
-            i += 1
+        for i,ball in enumerate(balls):
             # Move the ball
             ball.x += settings.BALL_SPEED * ball_direction_x[i % settings.ball_count]
             ball.y += settings.BALL_SPEED * ball_direction_y[i % settings.ball_count]
