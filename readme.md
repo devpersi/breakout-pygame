@@ -25,6 +25,7 @@ This project is an assignment for a python class, built using pygame. The projec
 - Persi.Dev
 - DimPour
 - zizwrzhs
+- Dogojesh
   
 ## Acknowledgments
 - [Course page on opencourses.ionio.gr](https://opencourses.ionio.gr/courses/DDI212/)
