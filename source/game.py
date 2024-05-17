@@ -16,6 +16,7 @@ import pygame as pg
 import random
 import settings
 import breakoutMenu
+import menu_settings
 from game_over import game_over
 from text_funcs import text_current
 from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img, p2p_font_current
@@ -127,14 +128,20 @@ def loop(screen : pg.Surface) -> None:
             blue_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
         
         # p1 controls
-        keyboard_press = pg.key.get_pressed()
-        
         paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and settings.FRIENDLY_FIRE if settings.COOP else True
         
-        if keyboard_press[pg.K_a] and p1_paddle.left > 0:
-            p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
-        elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
-            p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
+        if menu_settings.input_mode == "Keyboard":
+            keyboard_press = pg.key.get_pressed()
+            if keyboard_press[pg.K_a] and p1_paddle.left > 0:
+                p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+            elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
+                p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
+        elif menu_settings.input_mode == "Mouse":
+            mouse_press = pg.mouse.get_pressed()
+            if mouse_press[0] and p1_paddle.left > 0:
+                p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+            elif mouse_press[2] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
+                p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
             
         if settings.COOP:
             # p2 controls
