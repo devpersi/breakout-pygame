@@ -18,7 +18,7 @@ import settings
 import breakoutMenu
 import menu_settings
 from game_over import game_over
-from text_funcs import text_current
+from text_funcs import text_current, text_score
 from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img, p2p_font_current
 from collisions import collision
 
@@ -26,6 +26,8 @@ def loop(screen : pg.Surface) -> None:
     """Main gameplay loop"""    
     clock = pg.time.Clock()
 
+    settings.score = 0
+    settings.lives = 3
     # Create balls
     ball_direction_x = [random.uniform(-2, -1) for i in range(settings.ball_count)]
     ball_direction_y = [random.uniform(1, 2) for i in range(settings.ball_count)]
@@ -51,11 +53,11 @@ def loop(screen : pg.Surface) -> None:
             if event.type == pg.QUIT:
                 exit()
                 
-                
         # Clear the screen
         screen.fill(settings.SCREEN_BACKGROUND_COLOUR)
         
         text_current(screen, "Lives: " + str(settings.lives), p2p_font_current, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
+        text_score(screen, "Score: " + str(settings.score), p2p_font_current, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
         
         # Spawn ball
         for ball in balls:
@@ -110,16 +112,19 @@ def loop(screen : pg.Surface) -> None:
             if brick_index != -1:
                 brick = blue_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
+                settings.score += 1
             
             brick_index = ball.collidelist(green_brick_list)
             if brick_index != -1:
                 brick = green_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
+                settings.score += 1
             
             brick_index = ball.collidelist(red_brick_list)
             if brick_index != -1:
                 brick = red_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
+                settings.score += 1
         
         # respawn bricks if they are all broken
         if not (red_brick_list or green_brick_list or blue_brick_list):

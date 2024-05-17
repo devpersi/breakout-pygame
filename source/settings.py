@@ -76,3 +76,4 @@ PADDLE_SPEED = 5
 PADDLE_HOME_SPAWN_LOCATION = ((SCREEN_WIDTH - PADDLE_SIZE[0])*0.5, SCREEN_HEIGHT*0.95) # Middle bottom of the screen
 
 lives = 3
+score = 0
