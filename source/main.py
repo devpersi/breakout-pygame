@@ -1,6 +1,5 @@
 from pygame import init, display, mixer
 import breakoutMenu
-import game
 from settings import SCREEN_SIZE
 
 # Create game window

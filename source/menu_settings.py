@@ -1,7 +1,7 @@
 fade_time = 1
 
-mute1 = False
-mute2 = False
+mute_music = False
+mute_sfx = False
 
 menu_state = "main"
 input_mode = "Keyboard"

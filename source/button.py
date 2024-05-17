@@ -28,7 +28,7 @@ class Button():
 		if self.rect.collidepoint(pos):
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-					if not menu_settings.mute2: button_sfx.play()
+					if not menu_settings.mute_sfx: button_sfx.play()
 					self.clicked = True
 					action = True
 

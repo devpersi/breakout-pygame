@@ -83,24 +83,24 @@ def loop(screen):
 			text(screen, "AUDIO", inits.p2p_font, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 			if inits.back_button.draw(screen):
 				menu_settings.menu_state = "options"
-			if not menu_settings.mute1:
+			if not menu_settings.mute_music:
 				if inits.music_button.draw(screen):
 					print("Music Muted")
 					pg.mixer.music.set_volume(0)
-					menu_settings.mute1 = True
+					menu_settings.mute_music = True
 			else:
 				if inits.music_muted_button.draw(screen):
 					print("Music Unmuted")
 					pg.mixer.music.set_volume(0.5)
-					menu_settings.mute1 = False
-			if not menu_settings.mute2:
+					menu_settings.mute_music = False
+			if not menu_settings.mute_sfx:
 				if inits.sound_button.draw(screen):
 					print("Sound Muted")
-					menu_settings.mute2 = True
+					menu_settings.mute_sfx = True
 			else:
 				if inits.sound_muted_button.draw(screen):
 					print("Sound Unmuted")
-					menu_settings.mute2 = False
+					menu_settings.mute_sfx = False
 
 		if menu_settings.menu_state == "mode":
 			text(screen, "MODE", inits.p2p_font, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
