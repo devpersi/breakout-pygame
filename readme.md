@@ -30,9 +30,14 @@ This project is an assignment for a python class, built using pygame. The projec
 ## Acknowledgments
 - [Course page on opencourses.ionio.gr](https://opencourses.ionio.gr/courses/DDI212/)
 - [pygame docs](https://www.pygame.org/docs/)
+- [background from /u/MeleeMeta on /r/PixelArt](https://pay.reddit.com/r/PixelArt/comments/j8btv8/made_this_as_a_menu_background_for_a_game_im/)
+  
+### Music
+- [ELFL - Last Odyssey](https://www.youtube.com/watch?v=FfpuCS7n7v0)
 
 ### Youtube tutorials
 - [Coder Space - Let's code Breakout Game [...]](https://www.youtube.com/watch?v=KDhOEqo0m38)
 - [EZ Coding - Breakout Tutorial Using Python/Pygame (playlist)](https://www.youtube.com/watch?v=WN2mfdnbguw&list=PLxZI4CJBTZmDC7MqhzMi2RBRSYaxa2F7v)
-- [Coding with Russ - Pygame Breakout Beginner Tutorial in Python (playlist)](https://www.youtube.com/watch?v=NIfkaOF3Hjs&list=PLjcN1EyupaQlbAyHLsuFIp0n6i_p8XWaO)
-- [Clear Code - Breakout in python (long)](https://www.youtube.com/watch?v=4tVC1vhxiao) 
+- [Coding with Russ - Pygame Breakout [...] (playlist)](https://www.youtube.com/watch?v=NIfkaOF3Hjs&list=PLjcN1EyupaQlbAyHLsuFIp0n6i_p8XWaO)
+- [Clear Code - Breakout in python (long)](https://www.youtube.com/watch?v=4tVC1vhxiao)
+- [Coding with Russ - [...] Adding Buttons](https://www.youtube.com/watch?v=G8MYGDf_9ho)
