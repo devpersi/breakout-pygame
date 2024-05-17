@@ -103,8 +103,8 @@ def scale_menu(screen_width, screen_height):
     # audioMenuButtons
     music_button = Button(screen_width / (1280 / 541), screen_height/ 2 - music_img.get_height() / 2, music_img, music_img_highlighted, scale)
     sound_button = Button(screen_width / (1280 / 655), screen_height/ 2 - sound_img.get_height() / 2, sound_img, sound_img_highlighted, scale)
-    music_muted_button = Button(screen_width / (1280 / 541), screen_height/ (720 / 432), music_muted_img, music_muted_img_highlighted, scale)
-    sound_muted_button = Button(screen_width / (1280 / 655), screen_height/ (720 / 432), sound_muted_img, sound_muted_img_highlighted, scale)
+    music_muted_button = Button(screen_width / (1280 / 541), screen_height/ 2 - music_img.get_height() / 2, music_muted_img, music_muted_img_highlighted, scale)
+    sound_muted_button = Button(screen_width / (1280 / 655), screen_height/ 2 - sound_img.get_height() / 2, sound_muted_img, sound_muted_img_highlighted, scale)
 
     # modeMenuButtons
     keyboard_mode_button = Button(screen_width / (1280 / 522), screen_height / (720 / 261), keyboard_img, keyboard_img_highlighted, scale)
