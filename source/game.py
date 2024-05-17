@@ -16,6 +16,7 @@ import pygame as pg
 import random
 import settings
 import breakoutMenu
+from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img
 from collisions import collision
 
 def loop(screen : pg.Surface) -> None:
@@ -40,6 +41,7 @@ def loop(screen : pg.Surface) -> None:
     p1_paddle = pg.Rect(settings.PADDLE_HOME_SPAWN_LOCATION, settings.PADDLE_SIZE)
     if settings.COOP:
         p2_paddle = pg.Rect(settings.PADDLE_HOME_SPAWN_LOCATION, settings.PADDLE_SIZE)
+
     while True:
         # Exit when game is closed
         for event in pg.event.get():
@@ -51,18 +53,18 @@ def loop(screen : pg.Surface) -> None:
         
         # Spawn ball
         for ball in balls:
-            pg.draw.circle(screen, settings.BALL_COLOUR, ball.center, settings.BALL_RADIUS)
+            screen.blit(ball_img, ball)
 
         # Spawn brick
-        [pg.draw.rect(screen, settings.BRICK_RED, brick) for brick in red_brick_list]
-        [pg.draw.rect(screen, settings.BRICK_GREEN, brick) for brick in green_brick_list]
-        [pg.draw.rect(screen, settings.BRICK_BLUE, brick) for brick in blue_brick_list]
+        [screen.blit(red_brick_img, brick) for brick in red_brick_list]
+        [screen.blit(green_brick_img, brick) for brick in green_brick_list]
+        [screen.blit(blue_brick_img, brick) for brick in blue_brick_list]
         
         # Spawn paddles
-        pg.draw.rect(screen, settings.RED_PADDLE_COLOUR, p1_paddle)
+        screen.blit(red_paddle_img, p1_paddle)
         
         if settings.COOP:
-            pg.draw.rect(screen, settings.BLUE_PADDLE_COLOUR, p2_paddle)
+            screen.blit(orange_paddle_img, p2_paddle)
         
         for i,ball in enumerate(balls):
             # Move the ball
@@ -75,7 +77,6 @@ def loop(screen : pg.Surface) -> None:
                 ball.y = settings.BALL_HOME_SPAWN_LOCATION[1]
                 ball_direction_x[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
                 ball_direction_y[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
-            
             
             # Reflect the ball when it reaches a side wall
             if ball.centerx < settings.BALL_RADIUS or ball.centerx > settings.SCREEN_WIDTH - settings.BALL_RADIUS:

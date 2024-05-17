@@ -10,8 +10,5 @@
 # ignore ALL files in ANY directory named temp
 temp/
 
-# temporarily ignore images
-*.png
-
 # ignore pycache
 __pycache__

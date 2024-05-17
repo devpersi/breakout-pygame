@@ -6,6 +6,7 @@ pygame.font.init()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
+# menu images
 BG_SMALL = pygame.image.load("images/bg.png")
 BG_MEDIUM = pygame.image.load("images/bg.png")
 BG_LARGE = pygame.image.load("images/bg.png")
@@ -63,6 +64,16 @@ mouse_img_highlighted = pygame.image.load('images/modes/mouse_mode_highlighted.p
 
 back_img = pygame.image.load('images/back.png')
 back_img_highlighted = pygame.image.load('images/back_highlighted.png')
+
+# game images
+red_paddle_img = pygame.image.load('images/game/red_paddle.png')
+orange_paddle_img = pygame.image.load('images/game/orange_paddle.png')
+
+red_brick_img = pygame.image.load('images/game/red_brick.png')
+green_brick_img = pygame.image.load('images/game/green_brick.png')
+blue_brick_img = pygame.image.load('images/game/blue_brick.png')
+
+ball_img = pygame.image.load('images/game/ball.png')
 
 def scale_menu(screen_width, screen_height):
     global BG_SMALL, BG_MEDIUM, BG_LARGE, TITLE_SMALL, TITLE_MEDIUM, TITLE_LARGE, BG_BLUR_SMALL, BG_BLUR_MEDIUM, BG_BLUR_LARGE, p2p_font, p2p_font_current, play_solo_button, play_coop_button, options_button, exit_button, video_button, audio_button, mode_button, small_button, medium_button, large_button, music_button, sound_button, music_muted_button, sound_muted_button, keyboard_mode_button, mouse_mode_button, back_button
