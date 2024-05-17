@@ -25,16 +25,7 @@ def collision(direction_x: int, direction_y: int, ball: pg.Rect, other: pg.Rect,
 
     Returns:
     - tuple[int, int]: The updated direction of movement for the ball as a tuple containing the new x-direction and y-direction.
-    """
-    if direction_x > 0:
-        delta_x = ball.right - other.left
-    else:
-        delta_x = other.right - ball.left
-    if direction_y > 0:
-        delta_y = ball.bottom - other.top
-    else:
-        delta_y = other.bottom - ball.top
-    
+    """    
     # Calculate the overlap distances between the ball and the other object
     overlap_x = ball.right - other.left if direction_x > 0 else other.right - ball.left
     overlap_y = ball.bottom - other.top if direction_y > 0 else other.bottom - ball.top
