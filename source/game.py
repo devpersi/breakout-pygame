@@ -66,48 +66,48 @@ def loop(screen : pg.Surface) -> None:
         
         for i,ball in enumerate(balls):
             # Move the ball
-            ball.x += settings.BALL_SPEED * ball_direction_x[i % settings.ball_count]
-            ball.y += settings.BALL_SPEED * ball_direction_y[i % settings.ball_count]
+            ball.x += settings.BALL_SPEED * ball_direction_x[i]
+            ball.y += settings.BALL_SPEED * ball_direction_y[i]
             
             # Reset when hitting the bottom
             if ball.centery > settings.SCREEN_HEIGHT - settings.BALL_RADIUS:
                 ball.x = random.randint(2*settings.BALL_SIZE, settings.SCREEN_WIDTH - 2*settings.BALL_SIZE)
                 ball.y = settings.BALL_HOME_SPAWN_LOCATION[1]
-                ball_direction_x[i % settings.ball_count] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
-                ball_direction_y[i % settings.ball_count] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
+                ball_direction_x[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
+                ball_direction_y[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
             
             
             # Reflect the ball when it reaches a side wall
             if ball.centerx < settings.BALL_RADIUS or ball.centerx > settings.SCREEN_WIDTH - settings.BALL_RADIUS:
-                ball_direction_x[i % settings.ball_count] = -ball_direction_x[i % settings.ball_count]
+                ball_direction_x[i] = -ball_direction_x[i]
             
             # same for the top
             if ball.centery < settings.BALL_RADIUS:
-                ball_direction_y[i % settings.ball_count] = -ball_direction_y[i % settings.ball_count]
+                ball_direction_y[i] = -ball_direction_y[i]
                 
             # same for paddle collision
-            if ball.colliderect(p1_paddle) and ball_direction_y[i % settings.ball_count] > 0:
-                ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count] = collision(ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count], ball, p1_paddle, settings.COLLISION_THRESHOLD)
+            if ball.colliderect(p1_paddle) and ball_direction_y[i] > 0:
+                ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, p1_paddle, settings.COLLISION_THRESHOLD)
                 
             if settings.COOP:
-                if ball.colliderect(p2_paddle) and ball_direction_y[i % settings.ball_count] > 0:
-                    ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count] = collision(ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count], ball, p2_paddle, settings.COLLISION_THRESHOLD)
+                if ball.colliderect(p2_paddle) and ball_direction_y[i] > 0:
+                    ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, p2_paddle, settings.COLLISION_THRESHOLD)
 
             # same for brick collision
             brick_index = ball.collidelist(blue_brick_list)
             if brick_index != -1:
                 brick = blue_brick_list.pop(brick_index)
-                ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count] = collision(ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count], ball, brick, settings.COLLISION_THRESHOLD)
+                ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
             
             brick_index = ball.collidelist(green_brick_list)
             if brick_index != -1:
                 brick = green_brick_list.pop(brick_index)
-                ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count] = collision(ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count], ball, brick, settings.COLLISION_THRESHOLD)
+                ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
             
             brick_index = ball.collidelist(red_brick_list)
             if brick_index != -1:
                 brick = red_brick_list.pop(brick_index)
-                ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count] = collision(ball_direction_x[i % settings.ball_count], ball_direction_y[i % settings.ball_count], ball, brick, settings.COLLISION_THRESHOLD)
+                ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
 
         # p1 controls
         keyboard_press = pg.key.get_pressed()
