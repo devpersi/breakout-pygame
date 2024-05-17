@@ -16,7 +16,9 @@ import pygame as pg
 import random
 import settings
 import breakoutMenu
-from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img
+from game_over import game_over
+from text_funcs import text_current
+from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img, p2p_font_current
 from collisions import collision
 
 def loop(screen : pg.Surface) -> None:
@@ -48,8 +50,11 @@ def loop(screen : pg.Surface) -> None:
             if event.type == pg.QUIT:
                 exit()
                 
+                
         # Clear the screen
         screen.fill(settings.SCREEN_BACKGROUND_COLOUR)
+        
+        text_current(screen, "Lives: " + str(settings.lives), p2p_font_current, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
         
         # Spawn ball
         for ball in balls:
@@ -73,6 +78,11 @@ def loop(screen : pg.Surface) -> None:
             
             # Reset when hitting the bottom
             if ball.centery > settings.SCREEN_HEIGHT - settings.BALL_RADIUS:
+                if settings.lives > 0:
+                    settings.lives -= 1
+                else:
+                    game_over(screen)
+                    
                 ball.x = random.randint(2*settings.BALL_SIZE, settings.SCREEN_WIDTH - 2*settings.BALL_SIZE)
                 ball.y = settings.BALL_HOME_SPAWN_LOCATION[1]
                 ball_direction_x[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
@@ -109,7 +119,13 @@ def loop(screen : pg.Surface) -> None:
             if brick_index != -1:
                 brick = red_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
-
+        
+        # respawn bricks if they are all broken
+        if not (red_brick_list or green_brick_list or blue_brick_list):
+            red_brick_list = list(brick_list[:settings.BRICK_ROWS_TIMES_COLUMNS // 3])
+            green_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3:settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
+            blue_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
+        
         # p1 controls
         keyboard_press = pg.key.get_pressed()
         

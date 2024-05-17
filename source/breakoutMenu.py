@@ -4,7 +4,7 @@ import inits
 import menu_settings
 import settings
 from fader import fade
-from menu_funcs import text, text_current
+from text_funcs import text, text_current
 import game
 
 

@@ -51,7 +51,7 @@ FPS = 60
 COLLISION_THRESHOLD = 5
 BALL_RADIUS = 10
 BALL_SIZE = int(BALL_RADIUS*2**0.5)
-BALL_COLOUR = 0, 0 , 0 # Black ball
+BALL_COLOUR = 0, 0, 0 # Black ball
 BALL_SPEED = 2 # 2 pixels per frame
 BALL_HOME_SPAWN_LOCATION = random.randint(2*BALL_SIZE, SCREEN_WIDTH - 2*BALL_SIZE), (SCREEN_HEIGHT - BALL_SIZE)*0.5
 ball_count = 5
@@ -74,3 +74,5 @@ RED_PADDLE_COLOUR = 255, 0, 0 # Red paddles
 BLUE_PADDLE_COLOUR = 0, 0, 255 # Blue paddles
 PADDLE_SPEED = 5
 PADDLE_HOME_SPAWN_LOCATION = ((SCREEN_WIDTH - PADDLE_SIZE[0])*0.5, SCREEN_HEIGHT*0.95) # Middle bottom of the screen
+
+lives = 3
