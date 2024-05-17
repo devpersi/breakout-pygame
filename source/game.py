@@ -15,6 +15,7 @@ Controls:
 import pygame as pg
 import random
 import settings
+import breakoutMenu
 from collisions import collision
 
 def loop(screen : pg.Surface) -> None:
@@ -125,6 +126,9 @@ def loop(screen : pg.Surface) -> None:
                 p2_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
             elif keyboard_press[pg.K_KP6] and p2_paddle.right < settings.SCREEN_WIDTH:
                 p2_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
-            
+        
+        if keyboard_press[pg.K_ESCAPE]:
+            breakoutMenu.loop(screen)
+        
         pg.display.update()
         clock.tick(settings.FPS)
