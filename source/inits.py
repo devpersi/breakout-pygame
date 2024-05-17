@@ -6,6 +6,9 @@ pygame.font.init()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
+p2p_font = pygame.font.Font("fonts/PressStart2P-vaV7.ttf", int(SCREEN_WIDTH / (1280 / 38)))
+p2p_font_current = pygame.font.Font("fonts/PressStart2P-vaV7.ttf", int(SCREEN_WIDTH / (1280 / 20)))
+
 # menu images
 BG_SMALL = pygame.image.load("images/bg.png")
 BG_MEDIUM = pygame.image.load("images/bg.png")

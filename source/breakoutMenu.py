@@ -1,22 +1,10 @@
 import pygame as pg
 from sys import exit
-
-# Initialize all images and buttons
 import inits
-
-# Initialize mutes and menu states
 import menu_settings
-
-# Import screen sizes and coop mode state
 import settings
-
-# Import splash fade screen function
 from fader import fade
-
-# Import text functions for OPTIONS, VIDEO, AUDIO, MODE titles
-from menu_funcs import text, text_current
-
-# The game
+from text_funcs import text, text_current
 import game
 
 def loop(screen):

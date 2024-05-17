@@ -16,13 +16,18 @@ import pygame as pg
 import random
 import settings
 import breakoutMenu
-from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img
+import menu_settings
+from game_over import game_over
+from text_funcs import text_current, text_score
+from inits import red_paddle_img, orange_paddle_img, red_brick_img, green_brick_img, blue_brick_img, ball_img, p2p_font_current
 from collisions import collision
 
 def loop(screen : pg.Surface) -> None:
     """Main gameplay loop"""    
     clock = pg.time.Clock()
 
+    settings.score = 0
+    settings.lives = 3
     # Create balls
     ball_direction_x = [random.uniform(-2, -1) for i in range(settings.ball_count)]
     ball_direction_y = [random.uniform(1, 2) for i in range(settings.ball_count)]
@@ -51,6 +56,9 @@ def loop(screen : pg.Surface) -> None:
         # Clear the screen
         screen.fill(settings.SCREEN_BACKGROUND_COLOUR)
         
+        text_current(screen, "Lives: " + str(settings.lives), p2p_font_current, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
+        text_score(screen, "Score: " + str(settings.score), p2p_font_current, (255, 255, 255), settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
+        
         # Spawn ball
         for ball in balls:
             screen.blit(ball_img, ball)
@@ -73,6 +81,11 @@ def loop(screen : pg.Surface) -> None:
             
             # Reset when hitting the bottom
             if ball.centery > settings.SCREEN_HEIGHT - settings.BALL_RADIUS:
+                if settings.lives > 0:
+                    settings.lives -= 1
+                else:
+                    game_over(screen)
+                    
                 ball.x = random.randint(2*settings.BALL_SIZE, settings.SCREEN_WIDTH - 2*settings.BALL_SIZE)
                 ball.y = settings.BALL_HOME_SPAWN_LOCATION[1]
                 ball_direction_x[i] = random.choice([random.uniform(1, 2), random.uniform(-2, -1)])
@@ -99,26 +112,41 @@ def loop(screen : pg.Surface) -> None:
             if brick_index != -1:
                 brick = blue_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
+                settings.score += 1
             
             brick_index = ball.collidelist(green_brick_list)
             if brick_index != -1:
                 brick = green_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
+                settings.score += 1
             
             brick_index = ball.collidelist(red_brick_list)
             if brick_index != -1:
                 brick = red_brick_list.pop(brick_index)
                 ball_direction_x[i], ball_direction_y[i] = collision(ball_direction_x[i], ball_direction_y[i], ball, brick, settings.COLLISION_THRESHOLD)
-
-        # p1 controls
-        keyboard_press = pg.key.get_pressed()
+                settings.score += 1
         
+        # respawn bricks if they are all broken
+        if not (red_brick_list or green_brick_list or blue_brick_list):
+            red_brick_list = list(brick_list[:settings.BRICK_ROWS_TIMES_COLUMNS // 3])
+            green_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3:settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2])
+            blue_brick_list = list(brick_list[settings.BRICK_ROWS_TIMES_COLUMNS // 3 * 2:])
+        
+        # p1 controls
         paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and settings.FRIENDLY_FIRE if settings.COOP else True
         
-        if keyboard_press[pg.K_a] and p1_paddle.left > 0:
-            p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
-        elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
-            p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
+        if menu_settings.input_mode == "Keyboard":
+            keyboard_press = pg.key.get_pressed()
+            if keyboard_press[pg.K_a] and p1_paddle.left > 0:
+                p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+            elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
+                p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
+        elif menu_settings.input_mode == "Mouse":
+            mouse_press = pg.mouse.get_pressed()
+            if mouse_press[0] and p1_paddle.left > 0:
+                p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
+            elif mouse_press[2] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
+                p1_paddle.move_ip(settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the right, 0 pixels to the bottom/top
             
         if settings.COOP:
             # p2 controls
