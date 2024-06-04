@@ -135,8 +135,8 @@ def loop(screen : pg.Surface) -> None:
         # p1 controls
         paddles_not_currently_touching: bool = p1_paddle.right < p2_paddle.left and settings.FRIENDLY_FIRE if settings.COOP else True
         
+        keyboard_press = pg.key.get_pressed()
         if menu_settings.input_mode == "Keyboard":
-            keyboard_press = pg.key.get_pressed()
             if keyboard_press[pg.K_a] and p1_paddle.left > 0:
                 p1_paddle.move_ip(-settings.PADDLE_SPEED, 0) # PADDLE_SPEED pixels to the left, 0 pixels to the bottom/top
             elif keyboard_press[pg.K_d] and p1_paddle.right < settings.SCREEN_WIDTH and paddles_not_currently_touching:
