@@ -1,7 +1,7 @@
 # Breakout in Pygame
 
 ## Project Description
-This project is an assignment for a python class, built using pygame. The project features two paddles, a ball that reflects off the paddles, walls and bricks and destroys bricks on collision.
+This project is a breakout clone, built using pygame. The project features two paddles, a ball that reflects off the paddles, walls and bricks and destroys bricks on collision.
 
 ## Getting Started
 1. Clone or download the repository to your local machine
